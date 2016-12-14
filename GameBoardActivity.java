@@ -1881,4 +1881,46 @@ public class GameBoardActivity extends Activity {
 
         Log.v("test", str);
     }
+    
+    public void promotePawn() {
+        for ( int i = 0; i < 8; i++ ){
+            if (pieceArray[0][i] != null && pieceArray[0][i].getType() == "\u2659" ) {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(GameBoardActivity.this).create();
+                alertDialog.setCancelable(false);
+                alertDialog.setMessage("Promote your pawn:");
+                final int finalI = i;
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "\u2655", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        buttonArray[0][finalI].setText("\u2655");
+                        pieceArray[0][finalI].changeType("\u2655");
+                    }
+                });
+
+                alertDialog.show();
+            }
+
+        }
+
+        for ( int i = 0; i < 8; i++ ){
+            if ( pieceArray[7][i] != null && pieceArray[7][i].getType() == "\u265F" ) {
+
+                AlertDialog alertDialog = new AlertDialog.Builder(GameBoardActivity.this).create();
+                alertDialog.setCancelable(false);
+                alertDialog.setMessage("Promote your pawn:");
+                final int finalI = i;
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "\u265B", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        buttonArray[7][finalI].setText("\u265B");
+                        pieceArray[7][finalI].changeType("\u265B");
+                    }
+                });
+
+                alertDialog.show();
+            }
+
+        }
+
+    }
+    
 }
