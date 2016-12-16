@@ -484,16 +484,28 @@ public class GameBoardActivity extends Activity {
                     }
                 }
             }
-
-            if (inCheck == false && checkArray[kingX][kingY] == "C") {
-                pieceArray[x][y] = piece;
-                pieceArray[xVal][yVal] = null;
-                buttonArray[x][y].setText(pieceArray[x][y].getType());
-                buttonArray[xVal][yVal].setText("");
-                Toast.makeText(GameBoardActivity.this, "That move puts you in check!", Toast.LENGTH_LONG).show();
-                clearWhite();
-                emptySpaces();
-                return;
+            if (turn == 0) {
+                if (inCheck == false && checkArray[kingX][kingY] == "BC") {
+                    pieceArray[x][y] = piece;
+                    pieceArray[xVal][yVal] = null;
+                    buttonArray[x][y].setText(pieceArray[x][y].getType());
+                    buttonArray[xVal][yVal].setText("");
+                    Toast.makeText(GameBoardActivity.this, "That move puts you in check!", Toast.LENGTH_LONG).show();
+                    clearWhite();
+                    emptySpaces();
+                    return;
+                }
+            } else {
+                if (inCheck == false && checkArray[kingX][kingY] == "WC") {
+                    pieceArray[x][y] = piece;
+                    pieceArray[xVal][yVal] = null;
+                    buttonArray[x][y].setText(pieceArray[x][y].getType());
+                    buttonArray[xVal][yVal].setText("");
+                    Toast.makeText(GameBoardActivity.this, "That move puts you in check!", Toast.LENGTH_LONG).show();
+                    clearWhite();
+                    emptySpaces();
+                    return;
+                }
             }
         } else {
             for (int i = 0; i < 8; i++) {
@@ -532,10 +544,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if (x < 7 && buttonArray[x+1][y].getText() == "" && checkArray[x + 1][y] != "C"){
-                buttonArray[x + 1][y].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x + 1][y].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x + 1][y] != "WC") {
+                    buttonArray[x + 1][y].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x + 1][y].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x + 1][y] != "BC") {
+                    buttonArray[x + 1][y].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x + 1][y].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( x < 7) {
                 if (pieceArray[x + 1][y] != null && pieceArray[x + 1][y].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x + 1][y].setClickable(true);
@@ -544,10 +563,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if (x > 0 && buttonArray[x-1][y].getText() == "" && checkArray[x - 1][y] != "C"){
-                buttonArray[x-1][y].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x-1][y].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x - 1][y] != "WC") {
+                    buttonArray[x - 1][y].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x - 1][y] != "BC") {
+                    buttonArray[x - 1][y].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( x > 0 ) {
                 if (pieceArray[x - 1][y] != null && pieceArray[x - 1][y].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x - 1][y].setClickable(true);
@@ -556,10 +582,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if (y < 7 && buttonArray[x][y+1].getText() == "" && checkArray[x][y + 1] != "C"){
-                buttonArray[x][y+1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x][y+1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x][y + 1] != "WC") {
+                    buttonArray[x][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x][y + 1] != "BC") {
+                    buttonArray[x][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y < 7 ) {
                 if (pieceArray[x][y + 1] != null && pieceArray[x][y + 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x][y + 1].setClickable(true);
@@ -568,10 +601,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if (y > 0 && buttonArray[x][y-1].getText() == "" && checkArray[x][y - 1] != "C"){
-                buttonArray[x][y-1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x][y-1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x][y - 1] != "WC") {
+                    buttonArray[x][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x][y - 1] != "BC") {
+                    buttonArray[x][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y > 0) {
                 if (pieceArray[x][y - 1] != null && pieceArray[x][y - 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x][y - 1].setClickable(true);
@@ -580,10 +620,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if ( y < 7 && x < 7  && buttonArray[x+1][y+1].getText() == "" && checkArray[x + 1][y + 1] != "C"){
-                buttonArray[x+1][y+1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x+1][y+1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x+1][y+1] != "WC") {
+                    buttonArray[x + 1][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x + 1][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x+1][y+1] != "BC") {
+                    buttonArray[x + 1][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x + 1][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y < 7 && x < 7) {
                 if (pieceArray[x + 1][y + 1] != null && pieceArray[x + 1][y + 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x + 1][y + 1].setClickable(true);
@@ -592,10 +639,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if ( y > 0 && x > 0  && buttonArray[x-1][y-1].getText() == "" && checkArray[x - 1][y - 1] != "C"){
-                buttonArray[x-1][y-1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x-1][y-1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x-1][y-1] != "WC") {
+                    buttonArray[x - 1][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x-1][y-1] != "BC") {
+                    buttonArray[x - 1][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y > 0 && x > 0) {
                 if (pieceArray[x - 1][y - 1] != null && pieceArray[x - 1][y - 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x - 1][y - 1].setClickable(true);
@@ -604,10 +658,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if ( y > 0 && x < 7  && buttonArray[x+1][y-1].getText() == "" && checkArray[x + 1][y - 1] != "C"){
-                buttonArray[x+1][y-1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x+1][y-1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x+1][y-1] != "WC") {
+                    buttonArray[x+1][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x+1][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x+1][y-1] != "BC") {
+                    buttonArray[x+1][y - 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x+1][y - 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y>0 && x<7 ) {
                 if (pieceArray[x + 1][y - 1] != null && pieceArray[x + 1][y - 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x + 1][y - 1].setClickable(true);
@@ -616,10 +677,17 @@ public class GameBoardActivity extends Activity {
             }
 
             if ( y < 7 && x > 0  && buttonArray[x-1][y+1].getText() == "" && checkArray[x - 1][y + 1] != "C"){
-                buttonArray[x-1][y+1].setBackgroundResource(R.color.white);
-                buttonArray[x][y].setClickable(true);
-                buttonArray[x-1][y+1].setClickable(true);
-                pieceArray[x][y].setClicked(true);
+                if (color == "black" && checkArray[x - 1][y + 1] != "WC") {
+                    buttonArray[x - 1][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                } else if (color == "white" && checkArray[x - 1][y + 1] != "BC"){
+                    buttonArray[x - 1][y + 1].setBackgroundResource(R.color.white);
+                    buttonArray[x][y].setClickable(true);
+                    buttonArray[x - 1][y + 1].setClickable(true);
+                    pieceArray[x][y].setClicked(true);
+                }
             } else if ( y<7 && x>0 ) {
                 if (pieceArray[x - 1][y + 1] != null && pieceArray[x - 1][y + 1].getColor() != pieceArray[x][y].getColor()) {
                     buttonArray[x - 1][y + 1].setClickable(true);
@@ -805,44 +873,140 @@ public class GameBoardActivity extends Activity {
         }
     }
 
-    public void markKnight(int x, int y) {
+    public void markKnight(int x, int y, String color) {
         if ((x < 6 && y < 7 && buttonArray[x+2][y+1].getText() == "") || (x < 6 && y < 7 && pieceArray[x][y].getColor() == "black" && buttonArray[x+2][y+1].getText() == "\u2654") || (x < 6 && y < 7 && pieceArray[x][y].getColor() == "white" && buttonArray[x+2][y+1].getText() == "\u265A")) {
-            checkArray[x + 2][y + 1] = "C";
+            if (color == "black") {
+                if (checkArray[x+2][y+1] != "WC") {
+                    checkArray[x+2][y+1] = "BC";
+                } else {
+                    checkArray[x+2][y+1] = "C";
+                }
+            } else {
+                if (checkArray[x+2][y+1] != "BC") {
+                    checkArray[x+2][y+1] = "WC";
+                } else {
+                    checkArray[x+2][y+1] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x+2) + " Y: " + Integer.toString(y+1));
         }
 
         if ((x < 6 && y > 0 && buttonArray[x+2][y-1].getText() == "") || (x < 6 && y > 0 && pieceArray[x][y].getColor() == "black" && buttonArray[x+2][y-1].getText() == "\u2654") || (x < 6 && y > 0 && pieceArray[x][y].getColor() == "white" && buttonArray[x+2][y-1].getText() == "\u265A")) {
-            checkArray[x + 2][y - 1] = "C";
+            if (color == "black") {
+                if (checkArray[x+2][y-1] != "WC") {
+                    checkArray[x+2][y-1] = "BC";
+                } else {
+                    checkArray[x+2][y-1] = "C";
+                }
+            } else {
+                if (checkArray[x+2][y-1] != "BC") {
+                    checkArray[x+2][y-1] = "WC";
+                } else {
+                    checkArray[x+2][y-1] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x+2) + " Y: " + Integer.toString(y-1));
         }
 
         if ((x > 1 && y < 7 && buttonArray[x-2][y+1].getText() == "") || (x > 1 && y < 7 && pieceArray[x][y].getColor() == "black" && buttonArray[x-2][y+1].getText() == "\u2654") || (x > 1 && y < 7 && pieceArray[x][y].getColor() == "white" && buttonArray[x-2][y+1].getText() == "\u265A")) {
-            checkArray[x - 2][y + 1] = "C";
+            if (color == "black") {
+                if (checkArray[x-2][y+1] != "WC") {
+                    checkArray[x-2][y+1] = "BC";
+                } else {
+                    checkArray[x-2][y+1] = "C";
+                }
+            } else {
+                if (checkArray[x-2][y+1] != "BC") {
+                    checkArray[x-2][y+1] = "WC";
+                } else {
+                    checkArray[x-2][y+1] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x-2) + " Y: " + Integer.toString(y+1));
         }
 
         if ((x > 1 && y > 0 && buttonArray[x-2][y-1].getText() == "") || (x > 1 && y > 0 && pieceArray[x][y].getColor() == "black" && buttonArray[x-2][y-1].getText() == "\u2654") || (x > 1 && y > 0 && pieceArray[x][y].getColor() == "white" && buttonArray[x-2][y-1].getText() == "\u265A")) {
-            checkArray[x - 2][y - 1] = "C";
+            if (color == "black") {
+                if (checkArray[x-2][y-1] != "WC") {
+                    checkArray[x-2][y-1] = "BC";
+                } else {
+                    checkArray[x-2][y-1] = "C";
+                }
+            } else {
+                if (checkArray[x-2][y-1] != "BC") {
+                    checkArray[x-2][y-1] = "WC";
+                } else {
+                    checkArray[x-2][y-1] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x-2) + " Y: " + Integer.toString(y-1));
         }
 
         if ((x < 7 && y < 6 && buttonArray[x+1][y+2].getText() == "") || (x < 7 && y < 6 && pieceArray[x][y].getColor() == "black" && buttonArray[x+1][y+2].getText() == "\u2654") || (x < 7 && y < 6 && pieceArray[x][y].getColor() == "white" && buttonArray[x+1][y+2].getText() == "\u265A")) {
-            checkArray[x + 1][y + 2] = "C";
+            if (color == "black") {
+                if (checkArray[x+1][y+2] != "WC") {
+                    checkArray[x+1][y+2] = "BC";
+                } else {
+                    checkArray[x+1][y+2] = "C";
+                }
+            } else {
+                if (checkArray[x+1][y+2] != "BC") {
+                    checkArray[x+1][y+2] = "WC";
+                } else {
+                    checkArray[x+1][y+2] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y+2));
         }
 
         if ((x < 7 && y > 1 && buttonArray[x+1][y-2].getText() == "") || (x < 7 && y > 1 && pieceArray[x][y].getColor() == "black" && buttonArray[x+1][y-2].getText() == "\u2654") || (x < 7 && y > 1 && pieceArray[x][y].getColor() == "white" && buttonArray[x+1][y-2].getText() == "\u265A")) {
-            checkArray[x + 1][y - 2] = "C";
+            if (color == "black") {
+                if (checkArray[x+1][y-2] != "WC") {
+                    checkArray[x+1][y-2] = "BC";
+                } else {
+                    checkArray[x+1][y-2] = "C";
+                }
+            } else {
+                if (checkArray[x+1][y-2] != "BC") {
+                    checkArray[x+1][y-2] = "WC";
+                } else {
+                    checkArray[x+1][y-2] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y-2));
         }
 
         if ((x > 0 && y < 6 && buttonArray[x-1][y+2].getText() == "") || (x > 0 && y < 6 && pieceArray[x][y].getColor() == "black" && buttonArray[x-1][y+2].getText() == "\u2654") || (x > 0 && y < 6 && pieceArray[x][y].getColor() == "white" && buttonArray[x-1][y+2].getText() == "\u265A")) {
-            checkArray[x - 1][y + 2] = "C";
+            if (color == "black") {
+                if (checkArray[x-1][y+2] != "WC") {
+                    checkArray[x-1][y+2] = "BC";
+                } else {
+                    checkArray[x-1][y+2] = "C";
+                }
+            } else {
+                if (checkArray[x-1][y+2] != "BC") {
+                    checkArray[x-1][y+2] = "WC";
+                } else {
+                    checkArray[x-1][y+2] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y+2));
         }
 
         if ((x > 0 && y > 1 && buttonArray[x-1][y-2].getText() == "") || (x > 0 && y > 1 && pieceArray[x][y].getColor() == "black" && buttonArray[x-1][y-2].getText() == "\u2654") || (x > 0 && y > 1 && pieceArray[x][y].getColor() == "white" && buttonArray[x-1][y-2].getText() == "\u265A")) {
-            checkArray[x - 1][y - 2] = "C";
+            if (color == "black") {
+                if (checkArray[x-1][y-2] != "WC") {
+                    checkArray[x-1][y-2] = "BC";
+                } else {
+                    checkArray[x-1][y-2] = "C";
+                }
+            } else {
+                if (checkArray[x-1][y-2] != "BC") {
+                    checkArray[x-1][y-2] = "WC";
+                } else {
+                    checkArray[x-1][y-2] = "C";
+                }
+            }
             Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y-2));
         }
     }
@@ -999,13 +1163,29 @@ public class GameBoardActivity extends Activity {
 
     }
 
-    public void markQueen(int x, int y) {
+    public void markQueen(int x, int y, String color) {
         int yVal = y;
 
         for (int i = x + 1; i < 8; i++) {
             if (yVal + 1 < 8) {
                 if ((buttonArray[i][yVal + 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal + 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal + 1].getText() == "\u265A")) {
-                    checkArray[i][yVal +1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                        if (color == "black") {
+                            if (checkArray[i][yVal + 1] != "WC") {
+                                checkArray[i][yVal + 1] = "BC";
+                            } else {
+                                checkArray[i][yVal + 1] = "C";
+                            }
+                        } else {
+                            if (checkArray[i][yVal + 1] != "BC") {
+                                checkArray[i][yVal + 1] = "WC";
+                            } else {
+                                checkArray[i][yVal + 1] = "C";
+                            }
+                        }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal+1));
                     yVal++;
                 } else {
@@ -1019,7 +1199,23 @@ public class GameBoardActivity extends Activity {
         for (int i = x - 1; i >= 0; i--) {
             if (yVal + 1 < 8) {
                 if ((buttonArray[i][yVal + 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal + 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal + 1].getText() == "\u265A")) {
-                    checkArray[i][yVal + 1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                    if (color == "black") {
+                        if (checkArray[i][yVal + 1] != "WC") {
+                            checkArray[i][yVal + 1] = "BC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal + 1] != "BC") {
+                            checkArray[i][yVal + 1] = "WC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal+1));
                     yVal++;
                 } else {
@@ -1033,7 +1229,23 @@ public class GameBoardActivity extends Activity {
         for (int i = x + 1; i < 8; i++) {
             if (yVal - 1 >= 0) {
                 if ((buttonArray[i][yVal - 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal - 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal - 1].getText() == "\u265A")) {
-                    checkArray[i][yVal - 1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                    if (color == "black") {
+                        if (checkArray[i][yVal - 1] != "WC") {
+                            checkArray[i][yVal - 1] = "BC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal - 1] != "BC") {
+                            checkArray[i][yVal - 1] = "WC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal-1));
                     yVal--;
                 } else {
@@ -1047,7 +1259,19 @@ public class GameBoardActivity extends Activity {
         for (int i = x - 1; i >= 0; i--) {
             if (yVal - 1 >= 0) {
                 if ((buttonArray[i][yVal - 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal - 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal - 1].getText() == "\u265A")) {
-                    checkArray[i][yVal - 1] = "C";
+                    if (color == "black") {
+                        if (checkArray[i][yVal - 1] != "WC") {
+                            checkArray[i][yVal - 1] = "BC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal - 1] != "BC") {
+                            checkArray[i][yVal - 1] = "WC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal-1));
                     yVal--;
                 } else {
@@ -1058,7 +1282,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = x + 1; i < 8; i++) {
             if ((buttonArray[i][y].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][y].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][y].getText() == "\u265A")) {
-                checkArray[i][y] = "C";
+                if (color == "black") {
+                    if (checkArray[i][y] != "WC") {
+                        checkArray[i][y] = "BC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                } else {
+                    if (checkArray[i][y] != "BC") {
+                        checkArray[i][y] = "WC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(y));
             } else {
                 break;
@@ -1067,7 +1303,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = x - 1; i >= 0; i--) {
             if ((buttonArray[i][y].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][y].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][y].getText() == "\u265A")) {
-                checkArray[i][y] = "C";
+                if (color == "black") {
+                    if (checkArray[i][y] != "WC") {
+                        checkArray[i][y] = "BC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                } else {
+                    if (checkArray[i][y] != "BC") {
+                        checkArray[i][y] = "WC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(y));
             } else {
                 break;
@@ -1076,7 +1324,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = y + 1; i < 8; i++) {
             if ((buttonArray[x][i].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[x][i].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x][i].getText() == "\u265A")) {
-                checkArray[x][i] = "C";
+                if (color == "black") {
+                    if (checkArray[x][i] != "WC") {
+                        checkArray[x][i] = "BC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                } else {
+                    if (checkArray[x][i] != "BC") {
+                        checkArray[x][i] = "WC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(x) + " Y: " + Integer.toString(i));
             } else {
                 break;
@@ -1085,7 +1345,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = y - 1; i >= 0; i--) {
             if ((buttonArray[x][i].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[x][i].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x][i].getText() == "\u265A")) {
-                checkArray[x][i] = "C";
+                if (color == "black") {
+                    if (checkArray[x][i] != "WC") {
+                        checkArray[x][i] = "BC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                } else {
+                    if (checkArray[x][i] != "BC") {
+                        checkArray[x][i] = "WC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(x) + " Y: " + Integer.toString(i));
             } else {
                 break;
@@ -1191,13 +1463,29 @@ public class GameBoardActivity extends Activity {
         }
     }
 
-    public void markBishop(int x , int y) {
+    public void markBishop(int x , int y, String color) {
         int yVal = y;
 
         for (int i = x + 1; i < 8; i++) {
             if (yVal + 1 < 8) {
                 if ((buttonArray[i][yVal + 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal + 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal + 1].getText() == "\u265A")) {
-                    checkArray[i][yVal + 1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                    if (color == "black") {
+                        if (checkArray[i][yVal + 1] != "WC") {
+                            checkArray[i][yVal + 1] = "BC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal + 1] != "BC") {
+                            checkArray[i][yVal + 1] = "WC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal+1));
                     yVal++;
                 } else {
@@ -1211,7 +1499,23 @@ public class GameBoardActivity extends Activity {
         for (int i = x - 1; i >= 0; i--) {
             if (yVal + 1 < 8) {
                 if ((buttonArray[i][yVal + 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal + 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal + 1].getText() == "\u265A")) {
-                    checkArray[i][yVal + 1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                    if (color == "black") {
+                        if (checkArray[i][yVal + 1] != "WC") {
+                            checkArray[i][yVal + 1] = "BC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal + 1] != "BC") {
+                            checkArray[i][yVal + 1] = "WC";
+                        } else {
+                            checkArray[i][yVal + 1] = "C";
+                        }
+                    }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal+1));
                     yVal++;
                 } else {
@@ -1225,7 +1529,23 @@ public class GameBoardActivity extends Activity {
         for (int i = x + 1; i < 8; i++) {
             if (yVal - 1 >= 0) {
                 if ((buttonArray[i][yVal - 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal - 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal - 1].getText() == "\u265A")) {
-                    checkArray[i][yVal - 1] = "C";
+                    //if (checkArray[i][yVal + 1] != "BC" && checkArray[i][yVal + 1] != "WC") {
+                    if (color == "black") {
+                        if (checkArray[i][yVal - 1] != "WC") {
+                            checkArray[i][yVal - 1] = "BC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal - 1] != "BC") {
+                            checkArray[i][yVal - 1] = "WC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    }
+//                    } else {
+//                        checkArray[i][yVal - 1] = "C";
+//                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal-1));
                     yVal--;
                 } else {
@@ -1239,7 +1559,19 @@ public class GameBoardActivity extends Activity {
         for (int i = x - 1; i >= 0; i--) {
             if (yVal - 1 >= 0) {
                 if ((buttonArray[i][yVal - 1].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][yVal - 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][yVal - 1].getText() == "\u265A")) {
-                    checkArray[i][yVal - 1] = "C";
+                    if (color == "black") {
+                        if (checkArray[i][yVal - 1] != "WC") {
+                            checkArray[i][yVal - 1] = "BC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    } else {
+                        if (checkArray[i][yVal - 1] != "BC") {
+                            checkArray[i][yVal - 1] = "WC";
+                        } else {
+                            checkArray[i][yVal - 1] = "C";
+                        }
+                    }
                     Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(yVal-1));
                     yVal--;
                 } else {
@@ -1328,10 +1660,22 @@ public class GameBoardActivity extends Activity {
         }
     }
 
-    public void markRook(int x, int y) {
+    public void markRook(int x, int y, String color) {
         for (int i = x + 1; i < 8; i++) {
             if ((buttonArray[i][y].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][y].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][y].getText() == "\u265A")) {
-                checkArray[i][y] = "C";
+                if (color == "black") {
+                    if (checkArray[i][y] != "WC") {
+                        checkArray[i][y] = "BC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                } else {
+                    if (checkArray[i][y] != "BC") {
+                        checkArray[i][y] = "WC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                }
 
                 Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(y));
             } else {
@@ -1341,7 +1685,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = x - 1; i >= 0; i--) {
             if ((buttonArray[i][y].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][y].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][y].getText() == "\u265A")) {
-                checkArray[i][y] = "C";
+                if (color == "black") {
+                    if (checkArray[i][y] != "WC") {
+                        checkArray[i][y] = "BC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                } else {
+                    if (checkArray[i][y] != "BC") {
+                        checkArray[i][y] = "WC";
+                    } else {
+                        checkArray[i][y] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(y));
             } else {
                 break;
@@ -1350,7 +1706,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = y + 1; i < 8; i++) {
             if ((buttonArray[x][i].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[x][i].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x][i].getText() == "\u265A")) {
-                checkArray[x][i] = "C";
+                if (color == "black") {
+                    if (checkArray[x][i] != "WC") {
+                        checkArray[x][i] = "BC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                } else {
+                    if (checkArray[x][i] != "BC") {
+                        checkArray[x][i] = "WC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(x) + " Y: " + Integer.toString(i));
             } else {
                 break;
@@ -1359,7 +1727,19 @@ public class GameBoardActivity extends Activity {
 
         for (int i = y - 1; i >= 0; i--) {
             if ((buttonArray[x][i].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[x][i].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x][i].getText() == "\u265A")) {
-                checkArray[x][i] = "C";
+                if (color == "black") {
+                    if (checkArray[x][i] != "WC") {
+                        checkArray[x][i] = "BC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                } else {
+                    if (checkArray[x][i] != "BC") {
+                        checkArray[x][i] = "WC";
+                    } else {
+                        checkArray[x][i] = "C";
+                    }
+                }
                 Log.v("test", "CHECK @ X: " + Integer.toString(x) + " Y: " + Integer.toString(i));
             } else {
                 break;
@@ -1478,7 +1858,11 @@ public class GameBoardActivity extends Activity {
                 if ((buttonArray[x + 1][y + 1].getText() == "") || (buttonArray[x + 1][y + 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x + 1][y + 1].getText() == "\u265A")) {
                     //if ((buttonArray[x + 1][y + 1].getText() == "" || buttonArray[x + 1][y + 1].getText() == "\u2654") && pieceArray[x + 1][y + 1] != null && pieceArray[x + 1][y + 1].getColor() == "white") {
                         Log.v("test", "/////////// markPawn to right called");
-                        checkArray[x + 1][y + 1] = "C";
+                        if (checkArray[x+1][y+1] != "WC") {
+                            checkArray[x + 1][y + 1] = "BC";
+                        } else {
+                            checkArray[x + 1][y + 1] = "C";
+                        }
                         Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y+1));
                     //}
                 }
@@ -1487,7 +1871,11 @@ public class GameBoardActivity extends Activity {
             if ( x < 7 && y > 0) {
                 if ((buttonArray[x + 1][y - 1].getText() == "") || (buttonArray[x + 1][y - 1].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[x + 1][y - 1].getText() == "\u265A")) {
                         Log.v("test", "/////////// markPawn to left called");
+                    if (checkArray[x+1][y-1] != "WC") {
+                        checkArray[x + 1][y - 1] = "BC";
+                    } else {
                         checkArray[x + 1][y - 1] = "C";
+                    }
                         Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y-1));
                 }
             }
@@ -1495,14 +1883,22 @@ public class GameBoardActivity extends Activity {
         } else {
             if ( y < 7 && x > 0) {
                 if ((buttonArray[x - 1][y + 1].getText() == "") || (buttonArray[x - 1][y + 1].getText() == "\u265A") || (pieceArray[x][y].getColor() == "white" && buttonArray[x - 1][y + 1].getText() == "\u265A")) {
+                    if (checkArray[x-1][y+1] != "BC") {
+                        checkArray[x - 1][y + 1] = "WC";
+                    } else {
                         checkArray[x - 1][y + 1] = "C";
+                    }
                         Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y+1));
                 }
             }
 
             if ( x > 0 && y > 0 ) {
                 if ((buttonArray[x - 1][y - 1].getText() == "") || (buttonArray[x - 1][y - 1].getText() == "\u265A") || (pieceArray[x][y].getColor() == "white" && buttonArray[x - 1][y - 1].getText() == "\u265A")) {
+                    if (checkArray[x-1][y-1] != "BC") {
+                        checkArray[x - 1][y - 1] = "WC";
+                    } else {
                         checkArray[x - 1][y - 1] = "C";
+                    }
                         Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y-1));
                 }
             }
@@ -1520,19 +1916,19 @@ public class GameBoardActivity extends Activity {
                     }
 
                     if (buttonArray[i][j].getText() == "\u265B") {
-                        markQueen(i, j);
+                        markQueen(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u265C") {
-                        markRook(i, j);
+                        markRook(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u265D") {
-                        markBishop(i, j);
+                        markBishop(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u265E") {
-                        markKnight(i, j);
+                        markKnight(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u265F") {
@@ -1548,19 +1944,19 @@ public class GameBoardActivity extends Activity {
                     }
 
                     if (buttonArray[i][j].getText() == "\u2655") {
-                        markQueen(i, j);
+                        markQueen(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u2656") {
-                        markRook(i, j);
+                        markRook(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u2657") {
-                        markBishop(i, j);
+                        markBishop(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u2658") {
-                        markKnight(i, j);
+                        markKnight(i, j, pieceArray[i][j].getColor());
                     }
 
                     if (buttonArray[i][j].getText() == "\u2659") {
@@ -1988,7 +2384,7 @@ public class GameBoardActivity extends Activity {
         if (turn == 0) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (buttonArray[i][j].getText() == "\u2654" && checkArray[i][j] == "C") {
+                    if (buttonArray[i][j].getText() == "\u2654" && checkArray[i][j] == "BC") {
                         pieceArray[i][j].setChecked(true);
                         Toast.makeText(GameBoardActivity.this, "Check!", Toast.LENGTH_LONG).show();
                     }
@@ -1997,7 +2393,7 @@ public class GameBoardActivity extends Activity {
         } else {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (buttonArray[i][j].getText() == "\u265A" && checkArray[i][j] == "C") {
+                    if (buttonArray[i][j].getText() == "\u265A" && checkArray[i][j] == "WC") {
                         pieceArray[i][j].setChecked(true);
                         Toast.makeText(GameBoardActivity.this, "Check!", Toast.LENGTH_LONG).show();
                     }
@@ -2011,7 +2407,7 @@ public class GameBoardActivity extends Activity {
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (checkArray[i][j] == "C") {
+                if (checkArray[i][j] != null) {
                     str = str + "[" + checkArray[i][j] + "]";
                 }
 
