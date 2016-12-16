@@ -23,6 +23,7 @@ public class GameBoardActivity extends Activity {
     Piece[] pieces = new Piece[32];
     Piece[] whitePieceTaken = new Piece[16];
     Piece[] blackPieceTaken = new Piece[16];
+    boolean inCheck = false;
     int turn = 0;
     TextView turn_message;
     //ChessDatabaseHelper myDB;
@@ -374,6 +375,8 @@ public class GameBoardActivity extends Activity {
     }
 
     public void takePiece(int x, int y) {
+        Log.v("test", "//////////// takePiece called");
+
         int xVal = -1;
         int yVal = -1;
 
@@ -418,13 +421,17 @@ public class GameBoardActivity extends Activity {
             }
         }
 
+
         emptySpaces();
         changeTurn();
+        setInCheck();
         updateBoard();
         gameOver();
     }
 
     public void moveToOpen(int xVal, int yVal) {
+        Log.v("test", "//////////// moveToOpen called");
+
         int x = -1;
         int y = -1;
         Piece piece = null;
@@ -462,7 +469,56 @@ public class GameBoardActivity extends Activity {
 
         pieceArray[xVal][yVal] = piece;
         pieceArray[x][y] = null;
+
+        clearCheck();
+        check();
+        int kingX = -1;
+        int kingY = -1;
+
+        if (pieceArray[xVal][yVal].getColor() == "black") {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (pieceArray[i][j] != null && pieceArray[i][j].getType() == "\u265A") {
+                        kingX = i;
+                        kingY = j;
+                    }
+                }
+            }
+
+            if (inCheck == false && checkArray[kingX][kingY] == "C") {
+                pieceArray[x][y] = piece;
+                pieceArray[xVal][yVal] = null;
+                buttonArray[x][y].setText(pieceArray[x][y].getType());
+                buttonArray[xVal][yVal].setText("");
+                Toast.makeText(GameBoardActivity.this, "That move puts you in check!", Toast.LENGTH_LONG).show();
+                clearWhite();
+                emptySpaces();
+                return;
+            }
+        } else {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (pieceArray[i][j] != null && pieceArray[i][j].getType() == "\u2654") {
+                        kingX = i;
+                        kingY = j;
+                    }
+                }
+            }
+
+            if (inCheck == false && checkArray[kingX][kingY] == "C") {
+                pieceArray[x][y] = piece;
+                pieceArray[xVal][yVal] = null;
+                buttonArray[x][y].setText(pieceArray[x][y].getType());
+                buttonArray[xVal][yVal].setText("");
+                Toast.makeText(GameBoardActivity.this, "That move puts you in check!", Toast.LENGTH_LONG).show();
+                clearWhite();
+                emptySpaces();
+                return;
+            }
+        }
+
         changeTurn();
+        setInCheck();
         emptySpaces();
         updateBoard();
     }
@@ -589,12 +645,12 @@ public class GameBoardActivity extends Activity {
 
     public void markKing(int x, int y) {
         if ((x < 7 && buttonArray[x+1][y].getText() == "") || (x < 7 && pieceArray[x][y].getColor() == "black" && buttonArray[x+1][y].getText() == "\u2654") || (x < 7 && pieceArray[x][y].getColor() == "white" && buttonArray[x+1][y].getText() == "\u265A")){
-            checkArray[x+1][y] = "C";
+            checkArray[x + 1][y] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y));
         }
 
         if ((x > 0 && buttonArray[x-1][y].getText() == "") || (x > 0 && pieceArray[x][y].getColor() == "black" && buttonArray[x-1][y].getText() == "\u2654") || (x > 0 && pieceArray[x][y].getColor() == "white" && buttonArray[x-1][y].getText() == "\u265A")){
-            checkArray[x-1][y] = "C";
+            checkArray[x - 1][y] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y));
         }
 
@@ -751,42 +807,42 @@ public class GameBoardActivity extends Activity {
 
     public void markKnight(int x, int y) {
         if ((x < 6 && y < 7 && buttonArray[x+2][y+1].getText() == "") || (x < 6 && y < 7 && pieceArray[x][y].getColor() == "black" && buttonArray[x+2][y+1].getText() == "\u2654") || (x < 6 && y < 7 && pieceArray[x][y].getColor() == "white" && buttonArray[x+2][y+1].getText() == "\u265A")) {
-            checkArray[x+2][y+1] = "C";
+            checkArray[x + 2][y + 1] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x+2) + " Y: " + Integer.toString(y+1));
         }
 
         if ((x < 6 && y > 0 && buttonArray[x+2][y-1].getText() == "") || (x < 6 && y > 0 && pieceArray[x][y].getColor() == "black" && buttonArray[x+2][y-1].getText() == "\u2654") || (x < 6 && y > 0 && pieceArray[x][y].getColor() == "white" && buttonArray[x+2][y-1].getText() == "\u265A")) {
-            checkArray[x+2][y-1] = "C";
+            checkArray[x + 2][y - 1] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x+2) + " Y: " + Integer.toString(y-1));
         }
 
         if ((x > 1 && y < 7 && buttonArray[x-2][y+1].getText() == "") || (x > 1 && y < 7 && pieceArray[x][y].getColor() == "black" && buttonArray[x-2][y+1].getText() == "\u2654") || (x > 1 && y < 7 && pieceArray[x][y].getColor() == "white" && buttonArray[x-2][y+1].getText() == "\u265A")) {
-            checkArray[x-2][y+1] = "C";
+            checkArray[x - 2][y + 1] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x-2) + " Y: " + Integer.toString(y+1));
         }
 
         if ((x > 1 && y > 0 && buttonArray[x-2][y-1].getText() == "") || (x > 1 && y > 0 && pieceArray[x][y].getColor() == "black" && buttonArray[x-2][y-1].getText() == "\u2654") || (x > 1 && y > 0 && pieceArray[x][y].getColor() == "white" && buttonArray[x-2][y-1].getText() == "\u265A")) {
-            checkArray[x-2][y-1] = "C";
+            checkArray[x - 2][y - 1] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x-2) + " Y: " + Integer.toString(y-1));
         }
 
         if ((x < 7 && y < 6 && buttonArray[x+1][y+2].getText() == "") || (x < 7 && y < 6 && pieceArray[x][y].getColor() == "black" && buttonArray[x+1][y+2].getText() == "\u2654") || (x < 7 && y < 6 && pieceArray[x][y].getColor() == "white" && buttonArray[x+1][y+2].getText() == "\u265A")) {
-            checkArray[x+1][y+2] = "C";
+            checkArray[x + 1][y + 2] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y+2));
         }
 
         if ((x < 7 && y > 1 && buttonArray[x+1][y-2].getText() == "") || (x < 7 && y > 1 && pieceArray[x][y].getColor() == "black" && buttonArray[x+1][y-2].getText() == "\u2654") || (x < 7 && y > 1 && pieceArray[x][y].getColor() == "white" && buttonArray[x+1][y-2].getText() == "\u265A")) {
-            checkArray[x+1][y-2] = "C";
+            checkArray[x + 1][y - 2] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x+1) + " Y: " + Integer.toString(y-2));
         }
 
         if ((x > 0 && y < 6 && buttonArray[x-1][y+2].getText() == "") || (x > 0 && y < 6 && pieceArray[x][y].getColor() == "black" && buttonArray[x-1][y+2].getText() == "\u2654") || (x > 0 && y < 6 && pieceArray[x][y].getColor() == "white" && buttonArray[x-1][y+2].getText() == "\u265A")) {
-            checkArray[x-1][y+2] = "C";
+            checkArray[x - 1][y + 2] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y+2));
         }
 
         if ((x > 0 && y > 1 && buttonArray[x-1][y-2].getText() == "") || (x > 0 && y > 1 && pieceArray[x][y].getColor() == "black" && buttonArray[x-1][y-2].getText() == "\u2654") || (x > 0 && y > 1 && pieceArray[x][y].getColor() == "white" && buttonArray[x-1][y-2].getText() == "\u265A")) {
-            checkArray[x-1][y-2] = "C";
+            checkArray[x - 1][y - 2] = "C";
             Log.v("test", "CHECK @ X: " + Integer.toString(x-1) + " Y: " + Integer.toString(y-2));
         }
     }
@@ -1276,6 +1332,7 @@ public class GameBoardActivity extends Activity {
         for (int i = x + 1; i < 8; i++) {
             if ((buttonArray[i][y].getText() == "") || (pieceArray[x][y].getColor() == "black" && buttonArray[i][y].getText() == "\u2654") || (pieceArray[x][y].getColor() == "white" && buttonArray[i][y].getText() == "\u265A")) {
                 checkArray[i][y] = "C";
+
                 Log.v("test", "CHECK @ X: " + Integer.toString(i) + " Y: " + Integer.toString(y));
             } else {
                 break;
@@ -1453,7 +1510,9 @@ public class GameBoardActivity extends Activity {
     }
 
     public void check() {
-        if (turn == 0) {
+        Log.v("test", "//////////// check called");
+
+        //if (turn == 0) {
             for (int i = 7; i >= 0; i--) {
                 for (int j = 7; j >= 0; j--) {
                     if (buttonArray[i][j].getText() == "\u265A") {
@@ -1481,7 +1540,7 @@ public class GameBoardActivity extends Activity {
                     }
                 }
             }
-        } else {
+        //} else {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if (buttonArray[i][j].getText() == "\u2654") {
@@ -1509,10 +1568,22 @@ public class GameBoardActivity extends Activity {
                     }
                 }
             }
+        //}
+    }
+
+    public void clearCheckedOnPiece() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (pieceArray[i][j] != null && pieceArray[i][j].getCheck() && checkArray[i][j] == null) {
+                    pieceArray[i][j].setChecked(false);
+                }
+            }
         }
     }
 
     public void clearCheck() {
+        Log.v("test", "//////////// clearCheck called");
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 checkArray[i][j] = null;
@@ -1521,6 +1592,8 @@ public class GameBoardActivity extends Activity {
     }
 
     public void changeTurn() {
+        Log.v("test", "//////////// changeTurn called");
+
         int counter = 0;
 
         if (turn == 0) {
@@ -1560,6 +1633,8 @@ public class GameBoardActivity extends Activity {
     }
 
     public void updateBoard() {
+        Log.v("test", "//////////// updateBoard called");
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (pieceArray[i][j] != null) {
@@ -1589,9 +1664,14 @@ public class GameBoardActivity extends Activity {
         clearWhite();
         clearCheck();
         check();
-        checkKing();
-        checkmateKing();
+        clearCheckedOnPiece();
         showCs();
+        checkKing();
+        setInCheck();
+        showCs();
+        checkmateKing();
+
+        promotePawn();
 
         if ( turn_message.getText() == "White Player Wins"  || turn_message.getText() == "Black Player Wins") {
             for (int i = 0; i < 8; i++) {
@@ -1625,7 +1705,7 @@ public class GameBoardActivity extends Activity {
                     }
                 }
             }
-            Toast.makeText(GameBoardActivity.this,"Game Over", Toast.LENGTH_LONG).show();
+            Toast.makeText(GameBoardActivity.this,"Checkmate!", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -1646,6 +1726,7 @@ public class GameBoardActivity extends Activity {
     }
 
     public void setClicks() {
+
         if (turn == 0) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -1665,188 +1746,250 @@ public class GameBoardActivity extends Activity {
         }
     }
 
-    public void checkmateKing() {
-        int counter = 0;
-        int checks = 0;
-        int x = -1;
-        int y = -1;
 
-        if (turn == 0) {
+
+    public void checkmateKing() {
+        Log.v("test", "//////////////  checkmateKing called");
+        Log.v("test", "//////////////  " + checkArray[0][4]);
+
+        if (inCheck == false) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (buttonArray[i][j].getText() == "\u2654") {
-                        x = i;
-                        y = j;
-                    }
-                }
-            }
-
-            if (x < 7 && buttonArray[x + 1][y].getText() == "") {
-                counter++;
-
-                if (checkArray[x + 1][y] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x < 7 && y < 7 && buttonArray[x + 1][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x + 1][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (y < 7 && buttonArray[x][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (y > 0 && buttonArray[x][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x < 7 && y > 0 && buttonArray[x + 1][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x + 1][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && buttonArray[x - 1][y].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && y > 0 && buttonArray[x - 1][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && y < 7 && buttonArray[x - 1][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (checks != 0 && counter != 0 && checks == counter) {
-                Toast.makeText(GameBoardActivity.this, "Checkmate!", Toast.LENGTH_LONG).show();
-                turn_message.setText("Black Player Wins");
-
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        buttonArray[i][j].setClickable(false);
+                    if (pieceArray[i][j] != null && pieceArray[i][j].getCheck() == true) {
+                        inCheck = true;
+                        //Log.v("test", "//////////////  inCheck = " + Boolean.toString(inCheck) + "@" + Integer.toString(i) + Integer.toString(j));
                     }
                 }
             }
         } else {
+            Log.v("test", "//////////////  " + checkArray[0][4]);
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    if (buttonArray[i][j].getText() == "\u265A") {
-                        x = i;
-                        y = j;
-                    }
-                }
-            }
+                    if (pieceArray[i][j] != null && pieceArray[i][j].getCheck() == true && (buttonArray[i][j].getText() == "\u2654" || buttonArray[i][j].getText() == "\u265A")) {
+                        Log.v("test", "//////////////  " + checkArray[0][4]);
+                        Log.v("test", "//////////////  inCheck = " + Boolean.toString(inCheck) + "@" + Integer.toString(i) + Integer.toString(j));
 
-            if (x < 7 && buttonArray[x + 1][y].getText() == "") {
-                counter++;
+                        Toast.makeText(GameBoardActivity.this, "Checkmate!", Toast.LENGTH_LONG).show();
 
-                if (checkArray[x + 1][y] == "C") {
-                    checks++;
-                }
-            }
+                        if (pieceArray[i][j].getColor() == "black") {
+                            turn_message.setText("White Player Wins");
+                        } else {
+                            turn_message.setText("Black Player Wins");
+                        }
 
-            if (x < 7 && y < 7 && buttonArray[x + 1][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x + 1][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (y < 7 && buttonArray[x][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (y > 0 && buttonArray[x][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x < 7 && y > 0 && buttonArray[x + 1][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x + 1][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && buttonArray[x - 1][y].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && y > 0 && buttonArray[x - 1][y - 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y - 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (x > 0 && y < 7 && buttonArray[x - 1][y + 1].getText() == "") {
-                counter++;
-
-                if (checkArray[x - 1][y + 1] == "C") {
-                    checks++;
-                }
-            }
-
-            if (checks != 0 && counter != 0 && checks == counter) {
-                Toast.makeText(GameBoardActivity.this, "Checkmate!", Toast.LENGTH_LONG).show();
-                turn_message.setText("White Player Wins");
-
-                for (int i = 0; i < 8; i++) {
-                    for (int j = 0; j < 8; j++) {
-                        buttonArray[i][j].setClickable(false);
+                        for (int k = 0; i < 8; i++) {
+                            for (int l = 0; j < 8; j++) {
+                                buttonArray[k][l].setClickable(false);
+                            }
+                        }
                     }
                 }
             }
         }
+
+//        int counter = 0;
+//        int checks = 0;
+//        int x = -1;
+//        int y = -1;
+//
+//        if (turn == 1) {
+//            for (int i = 0; i < 8; i++) {
+//                for (int j = 0; j < 8; j++) {
+//                    if (buttonArray[i][j].getText() == "\u2654") {
+//                        x = i;
+//                        y = j;
+//                    }
+//                }
+//            }
+//
+//            if (x < 7 && buttonArray[x + 1][y].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x < 7 && y < 7 && buttonArray[x + 1][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (y < 7 && buttonArray[x][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (y > 0 && buttonArray[x][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x < 7 && y > 0 && buttonArray[x + 1][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && buttonArray[x - 1][y].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && y > 0 && buttonArray[x - 1][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && y < 7 && buttonArray[x - 1][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (checks != 0 && counter != 0 && checks == counter) {
+//                Toast.makeText(GameBoardActivity.this, "Checkmate!", Toast.LENGTH_LONG).show();
+//                turn_message.setText("Black Player Wins");
+//
+//                for (int i = 0; i < 8; i++) {
+//                    for (int j = 0; j < 8; j++) {
+//                        buttonArray[i][j].setClickable(false);
+//                    }
+//                }
+//            }
+//        } else {
+//            for (int i = 0; i < 8; i++) {
+//                for (int j = 0; j < 8; j++) {
+//                    if (buttonArray[i][j].getText() == "\u265A") {
+//                        x = i;
+//                        y = j;
+//                    }
+//                }
+//            }
+//
+//            if (x < 7 && buttonArray[x + 1][y].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x < 7 && y < 7 && buttonArray[x + 1][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (y < 7 && buttonArray[x][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (y > 0 && buttonArray[x][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x < 7 && y > 0 && buttonArray[x + 1][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x + 1][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && buttonArray[x - 1][y].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && y > 0 && buttonArray[x - 1][y - 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y - 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (x > 0 && y < 7 && buttonArray[x - 1][y + 1].getText() == "") {
+//                counter++;
+//
+//                if (checkArray[x - 1][y + 1] == "C") {
+//                    checks++;
+//                }
+//            }
+//
+//            if (checks != 0 && counter != 0 && checks == counter) {
+//                Toast.makeText(GameBoardActivity.this, "Checkmate!", Toast.LENGTH_LONG).show();
+//                turn_message.setText("White Player Wins");
+//
+//                for (int i = 0; i < 8; i++) {
+//                    for (int j = 0; j < 8; j++) {
+//                        buttonArray[i][j].setClickable(false);
+//                    }
+//                }
+//            }
+//        }
+    }
+
+    public void setInCheck() {
+        Log.v("test", "//////////// setInCheck called");
+
+        int counter = 0;
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (pieceArray[i][j] != null && pieceArray[i][j].getCheck()) {
+                    counter++;
+                }
+            }
+        }
+
+        if (counter == 0) {
+            inCheck = false;
+            Log.v("test", "//////////////  inCheck = " + Boolean.toString(inCheck));
+        }
     }
 
     public void checkKing() {
+        Log.v("test", "//////////// checkKing called");
+
         if (turn == 0) {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if (buttonArray[i][j].getText() == "\u2654" && checkArray[i][j] == "C") {
+                        pieceArray[i][j].setChecked(true);
                         Toast.makeText(GameBoardActivity.this, "Check!", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -1855,6 +1998,7 @@ public class GameBoardActivity extends Activity {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
                     if (buttonArray[i][j].getText() == "\u265A" && checkArray[i][j] == "C") {
+                        pieceArray[i][j].setChecked(true);
                         Toast.makeText(GameBoardActivity.this, "Check!", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -1881,7 +2025,7 @@ public class GameBoardActivity extends Activity {
 
         Log.v("test", str);
     }
-    
+
     public void promotePawn() {
         for ( int i = 0; i < 8; i++ ){
             if (pieceArray[0][i] != null && pieceArray[0][i].getType() == "\u2659" ) {
@@ -1922,5 +2066,5 @@ public class GameBoardActivity extends Activity {
         }
 
     }
-    
+
 }
